@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>87News – Media Online Maluku</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:       #e62222;
+      --red-dim:   #b01818;
+      --gold:      #f0a500;
+      --bg:        #0d0d0d;
+      --bg-2:      #141414;
+      --bg-3:      #1c1c1c;
+      --border:    #252525;
+      --text:      #e2e2e2;
+      --text-dim:  #999;
+      --text-mute: #555;
+      --white:     #ffffff;
+      --ff-head:   'Barlow Condensed', sans-serif;
+      --ff-body:   'Barlow', sans-serif;
+      --ease:      cubic-bezier(.25,.46,.45,.94);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: #070707; border-bottom: 1px solid #1a1a1a; padding: 7px 0; font-size: 12px; }
+    .topbar .inner { max-width: 1280px; margin: auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .topbar .left { display: flex; align-items: center; gap: 18px; color: var(--text-dim); }
+    .topbar .tag { background: var(--red); color: #fff; font-family: var(--ff-head); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; }
+    .topbar .socials { display: flex; gap: 2px; }
+    .topbar .socials a { color: var(--text-mute); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; transition: color .2s; }
+    .topbar .socials a:hover { color: var(--white); }
+
+    /* ── HEADER ── */
+    header { background: var(--bg); position: sticky; top: 0; z-index: 300; box-shadow: 0 1px 0 var(--border); }
+    .header-inner { max-width: 1280px; margin: auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .logo { font-family: var(--ff-head); font-size: 34px; font-weight: 800; letter-spacing: -1.5px; color: var(--white); line-height: 1; user-select: none; }
+    .logo em { color: var(--red); font-style: normal; }
+    .logo sup { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--text-mute); vertical-align: super; margin-left: 3px; font-style: normal; }
+
+    .nav-bar { background: var(--bg-2); border-bottom: 2px solid var(--red); }
+    .nav-bar .inner { max-width: 1280px; margin: auto; padding: 0 24px; display: flex; align-items: stretch; overflow-x: auto; scrollbar-width: none; }
+    .nav-bar .inner::-webkit-scrollbar { display: none; }
+    .nav-bar a { font-family: var(--ff-head); font-size: 13px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-mute); padding: 11px 15px; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: color .18s, border-color .18s; }
+    .nav-bar a:hover { color: var(--text); }
+    .nav-bar a.on { color: var(--red); border-bottom-color: var(--red); }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .btn-src { background: none; border: 1px solid var(--border); color: var(--text-mute); font-family: var(--ff-body); font-size: 13px; padding: 7px 14px; border-radius: 2px; cursor: pointer; transition: all .2s; }
+    .btn-src:hover { color: var(--white); border-color: #444; }
+
+    /* ── TICKER ── */
+    .ticker { background: var(--red); padding: 8px 0; overflow: hidden; }
+    .ticker .inner { max-width: 1280px; margin: auto; padding: 0 24px; display: flex; align-items: center; gap: 14px; }
+    .t-label { background: #fff; color: var(--red); font-family: var(--ff-head); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 3px 10px; flex-shrink: 0; }
+    .t-track { overflow: hidden; flex: 1; }
+    .t-items { display: flex; gap: 52px; white-space: nowrap; animation: run 40s linear infinite; }
+    .t-items a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.9); transition: color .2s; }
+    .t-items a:hover { color: #fff; }
+    @keyframes run { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ── HELPERS ── */
+    .wrap { max-width: 1280px; margin: auto; padding: 0 24px; }
+    .sec { padding: 40px 0 0; }
+
+    .sl { display: flex; align-items: center; gap: 11px; margin-bottom: 20px; }
+    .sl .b { width: 4px; height: 22px; background: var(--red); border-radius: 2px; flex-shrink: 0; }
+    .sl h2 { font-family: var(--ff-head); font-size: 17px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--white); }
+    .sl a { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-mute); border: 1px solid var(--border); padding: 4px 12px; border-radius: 2px; transition: all .2s; }
+    .sl a:hover { color: var(--white); border-color: #444; }
+
+    .badge { display: inline-block; font-family: var(--ff-head); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; background: var(--red); color: #fff; padding: 2px 8px; margin-bottom: 7px; }
+    .badge.gold { background: var(--gold); color: #1a0f00; }
+    .badge.dim { background: none; border: 1px solid #333; color: var(--text-mute); }
+
+    .meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-mute); margin-top: 6px; }
+    .meta .cat { color: var(--red); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 10px; }
+    .meta .dot::before { content: '·'; }
+
+    /* ── HERO ── */
+    .hero { padding-top: 24px; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 370px; gap: 3px; }
+
+    .hero-main { position: relative; overflow: hidden; cursor: pointer; background: #111; }
+    .hero-main .img-w { height: 530px; overflow: hidden; }
+    .hero-main .img-w img { transition: transform .7s var(--ease); }
+    .hero-main:hover .img-w img { transform: scale(1.04); }
+    .hero-main .grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.95) 0%, rgba(0,0,0,.45) 45%, transparent 100%); pointer-events: none; }
+    .hero-main .content { position: absolute; bottom: 0; left: 0; right: 0; padding: 30px 28px; }
+    .hero-main h1 { font-family: var(--ff-head); font-size: 34px; font-weight: 800; line-height: 1.12; color: #fff; letter-spacing: -.3px; margin-bottom: 10px; transition: color .2s; }
+    .hero-main:hover h1 { color: #ffd8d8; }
+    .hero-main p { font-size: 14px; color: rgba(255,255,255,.72); line-height: 1.65; max-width: 540px; }
+
+    .hero-stack { display: flex; flex-direction: column; gap: 3px; }
+    .hero-sub { position: relative; overflow: hidden; cursor: pointer; flex: 1; background: #111; }
+    .hero-sub .img-w { height: 100%; min-height: 173px; overflow: hidden; }
+    .hero-sub .img-w img { transition: transform .5s var(--ease); }
+    .hero-sub:hover .img-w img { transform: scale(1.06); }
+    .hero-sub .grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.15) 65%, transparent 100%); pointer-events: none; }
+    .hero-sub .content { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; }
+    .hero-sub h3 { font-family: var(--ff-head); font-size: 16px; font-weight: 700; line-height: 1.25; color: #fff; transition: color .2s; }
+    .hero-sub:hover h3 { color: #ffd8d8; }
+
+    /* ── MAIN + SIDEBAR ── */
+    .body-grid { display: grid; grid-template-columns: 1fr 292px; gap: 38px; }
+
+    /* list */
+    .list { display: flex; flex-direction: column; }
+    .li { display: flex; gap: 13px; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .li:last-child { border-bottom: none; }
+    .li .th { width: 94px; height: 66px; flex-shrink: 0; overflow: hidden; border-radius: 1px; background: #1a1a1a; }
+    .li .th img { transition: transform .4s var(--ease); }
+    .li:hover .th img { transform: scale(1.08); }
+    .li .tx { flex: 1; }
+    .li .tx h4 { font-family: var(--ff-head); font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--white); transition: color .2s; }
+    .li:hover .tx h4 { color: var(--red); }
+    .li .ts { font-size: 11px; color: var(--text-mute); flex-shrink: 0; padding-top: 2px; }
+
+    /* card grid */
+    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { background: var(--bg-2); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: border-color .25s, transform .25s; }
+    .card:hover { border-color: var(--red); transform: translateY(-3px); }
+    .card .img-w { height: 158px; overflow: hidden; background: #1a1a1a; }
+    .card .img-w img { transition: transform .5s var(--ease); }
+    .card:hover .img-w img { transform: scale(1.06); }
+    .card .bd { padding: 13px 15px 16px; }
+    .card .bd h3 { font-family: var(--ff-head); font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--white); transition: color .2s; }
+    .card:hover .bd h3 { color: #ffd0d0; }
+    .card .bd .ex { font-size: 13px; color: var(--text-dim); margin-top: 5px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* sidebar */
+    .sb-block { margin-bottom: 30px; }
+    .sb-head { font-family: var(--ff-head); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--white); padding-bottom: 10px; border-bottom: 2px solid var(--red); margin-bottom: 14px; }
+    .pop-item { display: flex; gap: 11px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .pop-item:last-child { border-bottom: none; }
+    .pop-item .n { font-family: var(--ff-head); font-size: 26px; font-weight: 800; color: #222; line-height: 1; min-width: 28px; flex-shrink: 0; }
+    .pop-item h5 { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; transition: color .2s; }
+    .pop-item:hover h5 { color: var(--red); }
+    .pop-item .pm { font-size: 11px; color: var(--text-mute); margin-top: 3px; }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill { font-family: var(--ff-head); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 5px 11px; border: 1px solid var(--border); color: var(--text-mute); cursor: pointer; transition: all .2s; border-radius: 1px; }
+    .pill:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+    .ad-box { background: var(--bg-3); border: 1px solid var(--border); padding: 22px 16px; text-align: center; }
+    .ad-box .ah { font-family: var(--ff-head); font-size: 19px; font-weight: 800; color: var(--white); margin-bottom: 5px; }
+    .ad-box p { font-size: 12px; color: var(--text-mute); line-height: 1.6; }
+    .ad-box .btn { display: inline-block; margin-top: 13px; background: var(--red); color: #fff; font-family: var(--ff-head); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 7px 18px; transition: background .2s; }
+    .ad-box .btn:hover { background: var(--red-dim); }
+
+    /* daerah tabs */
+    .dtabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .dtab { font-family: var(--ff-head); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 5px 13px; border: 1px solid var(--border); background: none; color: var(--text-mute); cursor: pointer; transition: all .2s; border-radius: 1px; }
+    .dtab:hover { color: var(--white); border-color: #444; }
+    .dtab.on { background: var(--red); border-color: var(--red); color: #fff; }
+
+    /* opini feature */
+    .feat { display: grid; grid-template-columns: 460px 1fr; gap: 3px; background: var(--bg-2); border: 1px solid var(--border); overflow: hidden; }
+    .feat-main { position: relative; overflow: hidden; cursor: pointer; }
+    .feat-main .img-w { height: 320px; overflow: hidden; background: #111; }
+    .feat-main .img-w img { transition: transform .5s var(--ease); }
+    .feat-main:hover .img-w img { transform: scale(1.04); }
+    .feat-main .grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.92) 0%, transparent 60%); pointer-events: none; }
+    .feat-main .content { position: absolute; bottom: 0; left: 0; right: 0; padding: 22px 20px; }
+    .feat-main h2 { font-family: var(--ff-head); font-size: 22px; font-weight: 800; line-height: 1.2; color: #fff; transition: color .2s; }
+    .feat-main:hover h2 { color: #ffd8d8; }
+    .feat-list { display: flex; flex-direction: column; }
+    .feat-li { display: flex; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .2s; flex: 1; }
+    .feat-li:last-child { border-bottom: none; }
+    .feat-li:hover { background: #1a1a1a; }
+    .feat-li .th { width: 88px; flex-shrink: 0; overflow: hidden; background: #111; }
+    .feat-li .th img { height: 100%; }
+    .feat-li .bd { padding: 13px 15px; flex: 1; }
+    .feat-li .bd h4 { font-family: var(--ff-head); font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--white); transition: color .2s; }
+    .feat-li:hover .bd h4 { color: var(--red); }
+
+    /* two col */
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 38px; }
+
+    /* newsletter */
+    .nl { background: linear-gradient(130deg, #180a0a 0%, #240d0d 100%); border: 1px solid #2e1212; padding: 38px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+    .nl .nt { font-family: var(--ff-head); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+    .nl h3 { font-family: var(--ff-head); font-size: 26px; font-weight: 800; color: var(--white); margin-bottom: 3px; }
+    .nl p { font-size: 13px; color: var(--text-mute); }
+    .nl-form { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nl-form input { background: rgba(255,255,255,.05); border: 1px solid #2e2e2e; padding: 10px 15px; font-size: 13px; font-family: var(--ff-body); color: var(--white); min-width: 230px; outline: none; border-radius: 2px; transition: border-color .2s; }
+    .nl-form input::placeholder { color: var(--text-mute); }
+    .nl-form input:focus { border-color: var(--red); }
+    .nl-form button { background: var(--red); color: #fff; border: none; padding: 10px 20px; font-family: var(--ff-head); font-size: 12px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; cursor: pointer; transition: background .2s; border-radius: 2px; }
+    .nl-form button:hover { background: #c01a1a; }
+
+    /* footer */
+    footer { background: #060606; border-top: 1px solid #1a1a1a; margin-top: 52px; }
+    .ft { max-width: 1280px; margin: auto; padding: 50px 24px 38px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; }
+    .fb .logo { font-size: 28px; }
+    .fb .sl2 { font-family: var(--ff-head); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-top: 2px; margin-bottom: 13px; }
+    .fb p { font-size: 13px; color: var(--text-mute); line-height: 1.7; }
+    .fb .soc { display: flex; gap: 7px; margin-top: 18px; }
+    .fb .soc a { width: 34px; height: 34px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-mute); transition: all .2s; border-radius: 2px; }
+    .fb .soc a:hover { background: var(--red); border-color: var(--red); color: #fff; }
+    .fc h4 { font-family: var(--ff-head); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--white); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #1e1e1e; }
+    .fc ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .fc ul li a { font-size: 13px; color: var(--text-mute); transition: color .2s; }
+    .fc ul li a:hover { color: var(--white); }
+    .fb-bot { border-top: 1px solid #1a1a1a; max-width: 1280px; margin: auto; padding: 15px 24px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-mute); flex-wrap: wrap; gap: 8px; }
+    .fb-bot a { color: var(--text-mute); transition: color .2s; }
+    .fb-bot a:hover { color: var(--white); }
+    .fb-bot .r { display: flex; gap: 14px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1060px) {
+      .hero-grid { grid-template-columns: 1fr 310px; }
+      .body-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .card-grid { grid-template-columns: 1fr 1fr; }
+      .ft { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-stack { display: none; }
+      .hero-main .img-w { height: 380px; }
+      .hero-main h1 { font-size: 24px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .feat { grid-template-columns: 1fr; }
+      .two { grid-template-columns: 1fr; }
+      .ft { grid-template-columns: 1fr; }
+      .nav-bar { display: none; }
+    }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    .hero-main .content { animation: fadeUp .65s var(--ease) both; }
+    .hero-sub:nth-child(1) .content { animation: fadeUp .6s .08s var(--ease) both; }
+    .hero-sub:nth-child(2) .content { animation: fadeUp .6s .16s var(--ease) both; }
+    .hero-sub:nth-child(3) .content { animation: fadeUp .6s .24s var(--ease) both; }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="inner">
+    <div class="left">
+      <span class="tag">87News</span>
+      <span>Rabu, 13 Mei 2026</span>
+      <span>⛅ Ambon 29°C</span>
+    </div>
+    <div class="socials">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">YouTube</a>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">87<em>NEWS</em></div>
+    <div class="header-right">
+      <button class="btn-src">⌕ &nbsp;Cari Berita</button>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="inner">
+      <a href="#" class="on">Beranda</a>
+      <a href="#">Daerah</a>
+      <a href="#">Nasional</a>
+      <a href="#">Politik</a>
+      <a href="#">Hukum</a>
+      <a href="#">Pendidikan</a>
+      <a href="#">Kesehatan</a>
+      <a href="#">Olahraga</a>
+      <a href="#">Opini</a>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="inner">
+    <span class="t-label">Breaking</span>
+    <div class="t-track">
+      <div class="t-items">
+        <a href="#">Curah Hujan Tinggi, Walikota Imbau Warga Waspadai Banjir dan Longsor</a>
+        <a href="#">Belasan Kios di Kawasan Poka Dibongkar Paksa oleh Satpol PP</a>
+        <a href="#">Pemkot Ambon Gencarkan Edukasi Literasi Digital bagi Pelajar</a>
+        <a href="#">Jemaah Calon Haji Ambon Resmi Diberangkatkan ke Tanah Suci</a>
+        <a href="#">Damkar Kota Ambon Raih Peringkat ke-7 di NFSC 2026</a>
+        <a href="#">KPK Dukung Transparansi Tata Kelola Keuangan Daerah di Maluku</a>
+        <!-- dupe -->
+        <a href="#">Curah Hujan Tinggi, Walikota Imbau Warga Waspadai Banjir dan Longsor</a>
+        <a href="#">Belasan Kios di Kawasan Poka Dibongkar Paksa oleh Satpol PP</a>
+        <a href="#">Pemkot Ambon Gencarkan Edukasi Literasi Digital bagi Pelajar</a>
+        <a href="#">Jemaah Calon Haji Ambon Resmi Diberangkatkan ke Tanah Suci</a>
+        <a href="#">Damkar Kota Ambon Raih Peringkat ke-7 di NFSC 2026</a>
+        <a href="#">KPK Dukung Transparansi Tata Kelola Keuangan Daerah di Maluku</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════ MAIN ═════════════ -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <!-- Main Story -->
+        <a href="#" class="hero-main">
+          <div class="img-w">
+            <img src="https://images.unsplash.com/photo-1547683905-f686c993aae5?w=900&q=80" alt="Bencana Alam" />
+          </div>
+          <div class="grad"></div>
+          <div class="content">
+            <span class="badge gold">Laporan Utama</span>
+            <h1>Curah Hujan Meningkat Drastis, Pemkot Ambon Siagakan Tim Reaksi Cepat di 12 Titik Rawan</h1>
+            <p>Memasuki puncak musim hujan, Wali Kota Ambon menginstruksikan BPBD untuk mengaktifkan posko darurat dan memperketat pemantauan di seluruh wilayah rawan banjir dan longsor di kota.</p>
+            <div class="meta" style="margin-top:14px;">
+              <span class="cat">Ambon</span>
+              <span class="dot">13 Mei 2026</span>
+              <span class="dot">5 mnt baca</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Side Stack -->
+        <div class="hero-stack">
+          <a href="#" class="hero-sub">
+            <div class="img-w">
+              <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80" alt="Hukum" />
+            </div>
+            <div class="grad"></div>
+            <div class="content">
+              <span class="badge">Hukum</span>
+              <h3>KPK Perkuat Pendampingan Tata Kelola Keuangan di Maluku</h3>
+              <div class="meta"><span class="cat">Nasional</span><span class="dot">12 Mei 2026</span></div>
+            </div>
+          </a>
+          <a href="#" class="hero-sub">
+            <div class="img-w">
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Wisata Maluku" />
+            </div>
+            <div class="grad"></div>
+            <div class="content">
+              <span class="badge">Daerah</span>
+              <h3>Cakadidi Offroad & Santa Claus Festival Masuk Nominasi API Award 2026</h3>
+              <div class="meta"><span class="cat">Wisata</span><span class="dot">10 Mei 2026</span></div>
+            </div>
+          </a>
+          <a href="#" class="hero-sub">
+            <div class="img-w">
+              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Olahraga" />
+            </div>
+            <div class="grad"></div>
+            <div class="content">
+              <span class="badge">Olahraga</span>
+              <h3>Damkar Ambon Pertahankan Prestasi di National Fire Sports Championship</h3>
+              <div class="meta"><span class="cat">Olahraga</span><span class="dot">08 Mei 2026</span></div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TERBARU + SIDEBAR -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="body-grid">
+
+        <div>
+          <div class="sl">
+            <div class="b"></div>
+            <h2>Berita Terbaru</h2>
+            <a href="#">Lihat Semua</a>
+          </div>
+          <div class="list">
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Ambon</span></div>
+                <h4>Belasan Kios dan Lapak di Kawasan Poka Dibongkar Paksa oleh Satpol PP Ambon</h4>
+                <div class="meta"><span>09 Mei 2026</span><span class="dot">3 mnt baca</span></div>
+              </div>
+              <span class="ts">23:24</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Daerah</span></div>
+                <h4>Wali Kota Lepas Keberangkatan Jemaah Calon Haji Ambon ke Tanah Suci</h4>
+                <div class="meta"><span>09 Mei 2026</span><span class="dot">4 mnt baca</span></div>
+              </div>
+              <span class="ts">21:24</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Pendidikan</span></div>
+                <h4>Pemkot Ambon Perkuat Literasi Digital dan Edukasi Bijak Bermedsos bagi Pelajar SMA</h4>
+                <div class="meta"><span>09 Mei 2026</span><span class="dot">5 mnt baca</span></div>
+              </div>
+              <span class="ts">21:16</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1547683905-f686c993aae5?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Ambon</span></div>
+                <h4>Tatipikalawan: Warga Kota Ambon Diminta Waspadai Potensi Banjir dan Tanah Longsor</h4>
+                <div class="meta"><span>09 Mei 2026</span><span class="dot">3 mnt baca</span></div>
+              </div>
+              <span class="ts">20:52</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Nasional</span></div>
+                <h4>Pansel Sekot Ambon Masih Menunggu Hasil Asessmen dari Seluruh Peserta</h4>
+                <div class="meta"><span>08 Mei 2026</span><span class="dot">4 mnt baca</span></div>
+              </div>
+              <span class="ts">20:38</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Hukum</span></div>
+                <h4>KPK Ingatkan Pentingnya Perencanaan dan Tata Kelola Keuangan Daerah yang Akuntabel</h4>
+                <div class="meta"><span>07 Mei 2026</span><span class="dot">6 mnt baca</span></div>
+              </div>
+              <span class="ts">22:45</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Ambon</span></div>
+                <h4>Call Center 112 Kota Ambon Kini Beroperasi 24 Jam Penuh untuk Layani Kedaruratan</h4>
+                <div class="meta"><span>08 Mei 2026</span><span class="dot">3 mnt baca</span></div>
+              </div>
+              <span class="ts">13:05</span>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <div class="meta"><span class="cat">Wisata</span></div>
+                <h4>Cakadidi Offroad dan Santa Claus Festival Siap Wakili Maluku di API Award</h4>
+                <div class="meta"><span>10 Mei 2026</span><span class="dot">5 mnt baca</span></div>
+              </div>
+              <span class="ts">10:30</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <div class="sb-block">
+            <div class="sb-head">Terpopuler</div>
+            <a href="#" class="pop-item">
+              <span class="n">01</span>
+              <div><h5>Curah Hujan Meningkat, Pemkot Ambon Siagakan Tim Reaksi Cepat</h5><div class="pm">13 Mei · Ambon</div></div>
+            </a>
+            <a href="#" class="pop-item">
+              <span class="n">02</span>
+              <div><h5>Belasan Kios di Poka Dibongkar Paksa</h5><div class="pm">09 Mei · Daerah</div></div>
+            </a>
+            <a href="#" class="pop-item">
+              <span class="n">03</span>
+              <div><h5>KPK Ingatkan Tata Kelola Keuangan Daerah yang Akuntabel</h5><div class="pm">07 Mei · Hukum</div></div>
+            </a>
+            <a href="#" class="pop-item">
+              <span class="n">04</span>
+              <div><h5>Damkar Ambon Raih Peringkat ke-7 di NFSC 2026</h5><div class="pm">08 Mei · Olahraga</div></div>
+            </a>
+            <a href="#" class="pop-item">
+              <span class="n">05</span>
+              <div><h5>Cakadidi Offroad Masuk Nominasi API Award 2026</h5><div class="pm">10 Mei · Wisata</div></div>
+            </a>
+          </div>
+
+          <div class="sb-block">
+            <div class="sb-head">Kategori</div>
+            <div class="pills">
+              <span class="pill">Ambon</span>
+              <span class="pill">Nasional</span>
+              <span class="pill">Politik</span>
+              <span class="pill">Hukum</span>
+              <span class="pill">Pendidikan</span>
+              <span class="pill">Kesehatan</span>
+              <span class="pill">Olahraga</span>
+              <span class="pill">Opini</span>
+              <span class="pill">Wisata</span>
+            </div>
+          </div>
+
+          <div class="sb-block">
+            <div class="ad-box">
+              <div class="ah">Pasang Iklan</div>
+              <p>Jangkau ribuan pembaca setia Maluku setiap hari bersama 87News.</p>
+              <a href="#" class="btn">Hubungi Kami</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DAERAH -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sl"><div class="b"></div><h2>Daerah</h2><a href="#">Lihat Semua</a></div>
+      <div class="dtabs">
+        <button class="dtab on">Ambon</button>
+        <button class="dtab">Maluku Tengah</button>
+        <button class="dtab">SBB</button>
+        <button class="dtab">SBT</button>
+        <button class="dtab">Tual</button>
+        <button class="dtab">Maluku Tenggara</button>
+        <button class="dtab">Buru</button>
+        <button class="dtab">Buru Selatan</button>
+        <button class="dtab">Aru</button>
+        <button class="dtab">Tanimbar</button>
+        <button class="dtab">MBD</button>
+      </div>
+      <div class="card-grid">
+        <a href="#" class="card">
+          <div class="img-w"><img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500&q=75" alt="" /></div>
+          <div class="bd">
+            <span class="badge">Ambon</span>
+            <h3>Call Center 112 Kini Beroperasi 24 Jam Penuh Layani Kedaruratan Warga</h3>
+            <p class="ex">Layanan darurat 112 di Kota Ambon resmi beroperasi selama 24 jam untuk melayani kebutuhan kedaruratan masyarakat setiap saat tanpa henti.</p>
+            <div class="meta"><span>08 Mei 2026</span><span class="dot">3 mnt</span></div>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="img-w"><img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=75" alt="" /></div>
+          <div class="bd">
+            <span class="badge">Ambon</span>
+            <h3>Pendampingan KPK Jadi Kunci Wujudkan Pemerintahan Bersih di Ambon</h3>
+            <p class="ex">Kehadiran KPK disambut positif sebagai upaya nyata mendorong transparansi dan akuntabilitas di lingkungan pemerintah daerah Kota Ambon.</p>
+            <div class="meta"><span>07 Mei 2026</span><span class="dot">4 mnt</span></div>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="img-w"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=75" alt="" /></div>
+          <div class="bd">
+            <span class="badge">Wisata</span>
+            <h3>Cakadidi Offroad & Santa Claus Festival Bawa Nama Maluku ke Kancah Nasional</h3>
+            <p class="ex">Dua event kebanggaan Maluku berhasil masuk nominasi Anugerah Pesona Indonesia Award 2026 dan siap bersaing di tingkat nasional.</p>
+            <div class="meta"><span>10 Mei 2026</span><span class="dot">5 mnt</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPINI -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sl"><div class="b"></div><h2>Opini</h2><a href="#">Lihat Semua</a></div>
+      <div class="feat">
+        <a href="#" class="feat-main">
+          <div class="img-w"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=700&q=80" alt="" /></div>
+          <div class="grad"></div>
+          <div class="content">
+            <span class="badge dim">Opini</span>
+            <h2>Merawat Demokrasi di Tengah Arus Disinformasi Digital yang Kian Masif</h2>
+            <div class="meta" style="margin-top:10px;"><span>Ahmad Rifai</span><span class="dot">08 Des 2025</span></div>
+          </div>
+        </a>
+        <div class="feat-list">
+          <a href="#" class="feat-li">
+            <div class="th"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=70" alt="" /></div>
+            <div class="bd">
+              <span class="badge dim" style="font-size:9px;padding:1px 7px;">Opini</span>
+              <h4>Potensi Wisata Maluku yang Masih Menunggu Sentuhan Serius dari Pemerintah</h4>
+              <div class="meta"><span>Siti Rahma</span><span class="dot">20 Nov 2025</span></div>
+            </div>
+          </a>
+          <a href="#" class="feat-li">
+            <div class="th"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200&q=70" alt="" /></div>
+            <div class="bd">
+              <span class="badge dim" style="font-size:9px;padding:1px 7px;">Opini</span>
+              <h4>Urgensi Pendidikan Vokasional Berkualitas di Wilayah Timur Indonesia</h4>
+              <div class="meta"><span>Dr. Benny Patty</span><span class="dot">05 Nov 2025</span></div>
+            </div>
+          </a>
+          <a href="#" class="feat-li">
+            <div class="th"><img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=200&q=70" alt="" /></div>
+            <div class="bd">
+              <span class="badge dim" style="font-size:9px;padding:1px 7px;">Opini</span>
+              <h4>Ketahanan Pangan dan Peran UMKM Lokal dalam Perekonomian Maluku</h4>
+              <div class="meta"><span>Maria Laisina</span><span class="dot">28 Okt 2025</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KESEHATAN + OLAHRAGA -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="two">
+        <div>
+          <div class="sl"><div class="b"></div><h2>Kesehatan</h2><a href="#">Lihat Semua</a></div>
+          <div class="list">
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>Deteksi Dini Penyakit Tidak Menular Jadi Prioritas Dinkes Maluku</h4>
+                <div class="meta"><span class="cat">Kesehatan</span><span class="dot">07 Mei 2026</span></div>
+              </div>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>Dinkes Ambon Gencarkan Vaksinasi di Wilayah Terpencil Kepulauan</h4>
+                <div class="meta"><span class="cat">Kesehatan</span><span class="dot">06 Mei 2026</span></div>
+              </div>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>RSUD Ambon Tambah Kapasitas IGD untuk Layani Lebih Banyak Pasien</h4>
+                <div class="meta"><span class="cat">Kesehatan</span><span class="dot">05 Mei 2026</span></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div>
+          <div class="sl"><div class="b"></div><h2>Olahraga</h2><a href="#">Lihat Semua</a></div>
+          <div class="list">
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>Atlet Maluku Raih 3 Medali Emas di Kejuaraan Renang Nasional 2026</h4>
+                <div class="meta"><span class="cat">Olahraga</span><span class="dot">08 Mei 2026</span></div>
+              </div>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>Damkar Ambon Peringkat ke-7 NFSC 2026, Wali Kota Berikan Apresiasi Penuh</h4>
+                <div class="meta"><span class="cat">Olahraga</span><span class="dot">08 Mei 2026</span></div>
+              </div>
+            </a>
+            <a href="#" class="li">
+              <div class="th"><img src="https://images.unsplash.com/photo-1459865264687-595d652de67e?w=200&q=70" alt="" /></div>
+              <div class="tx">
+                <h4>Liga Sepakbola Pelajar Maluku 2026 Resmi Dibuka, Diikuti 24 Tim</h4>
+                <div class="meta"><span class="cat">Olahraga</span><span class="dot">04 Mei 2026</span></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <div class="wrap">
+    <div class="nl">
+      <div>
+        <div class="nt">Newsletter 87News</div>
+        <h3>Tetap Terdepan dalam Informasi</h3>
+        <p>Ringkasan berita terpilih dari Maluku langsung ke kotak masuk Anda setiap pagi.</p>
+      </div>
+      <div class="nl-form">
+        <input type="email" placeholder="Masukkan email Anda..." />
+        <button>Daftar Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="fb">
+      <div class="logo">87<em style="color:var(--red);font-style:normal">NEWS</em></div>
+      <div class="sl2">Berani Bicara Fakta</div>
+      <p>Media online terpercaya yang menyajikan berita aktual, akurat, dan berimbang dari Maluku dan seluruh penjuru Indonesia.</p>
+      <div class="soc">
+        <a href="#">f</a><a href="#">ig</a><a href="#">tw</a><a href="#">yt</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Rubrik</h4>
+      <ul>
+        <li><a href="#">Daerah</a></li><li><a href="#">Nasional</a></li>
+        <li><a href="#">Politik</a></li><li><a href="#">Hukum</a></li>
+        <li><a href="#">Pendidikan</a></li><li><a href="#">Kesehatan</a></li>
+        <li><a href="#">Olahraga</a></li><li><a href="#">Opini</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Daerah</h4>
+      <ul>
+        <li><a href="#">Ambon</a></li><li><a href="#">Maluku Tengah</a></li>
+        <li><a href="#">SBB</a></li><li><a href="#">SBT</a></li>
+        <li><a href="#">Tual</a></li><li><a href="#">Maluku Tenggara</a></li>
+        <li><a href="#">Buru</a></li><li><a href="#">Tanimbar</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Perusahaan</h4>
+      <ul>
+        <li><a href="#">Tentang Kami</a></li><li><a href="#">Redaksi</a></li>
+        <li><a href="#">Karir</a></li><li><a href="#">Pasang Iklan</a></li>
+        <li><a href="#">Kontak</a></li><li><a href="#">Kebijakan Privasi</a></li>
+        <li><a href="#">Syarat Penggunaan</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fb-bot">
+    <span>© 2026 87News. Seluruh hak cipta dilindungi.</span>
+    <div class="r">
+      <a href="#">Kebijakan Privasi</a>
+      <a href="#">Syarat Penggunaan</a>
+      <a href="#">Redaksi</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.dtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.dtab').forEach(t => t.classList.remove('on'));
+      tab.classList.add('on');
+    });
+  });
+</script>
+</body>
+</html>
